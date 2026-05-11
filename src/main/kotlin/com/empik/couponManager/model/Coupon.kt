@@ -4,7 +4,7 @@ import java.time.Instant
 
 data class Coupon(
     val id: CouponId,
-    val version: Version,
+    val usageCount: UsageCount,
     val code: Code,
     val createdAt: CreatedAt,
     val maxUsages: MaxUsages,
@@ -14,9 +14,9 @@ data class Coupon(
 fun Coupon.toResponse(): CouponResponse =
     CouponResponse(
         id = id.value,
-        version = version.value,
         code = code.value,
         createdAt = createdAt.value,
+        usageCount = usageCount.value,
         maxUsages = maxUsages.value,
         countryCode = countryCode.value
     )
@@ -25,7 +25,7 @@ fun Coupon.toResponse(): CouponResponse =
 value class CouponId(val value: Long)
 
 @JvmInline
-value class Version(val value: Int)
+value class UsageCount(val value: Int)
 
 @JvmInline
 value class Code(val value: String)

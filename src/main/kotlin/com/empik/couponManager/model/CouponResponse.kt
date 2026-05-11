@@ -4,7 +4,7 @@ import java.time.Instant
 
 data class CouponResponse(
     val id: Long,
-    val version: Int,
+    val usageCount: Int,
     val code: String,
     val createdAt: Instant,
     val maxUsages: Int,

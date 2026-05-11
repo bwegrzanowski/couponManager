@@ -2,25 +2,31 @@ package com.empik.couponManager.controller
 
 import com.empik.couponManager.model.CouponResponse
 import com.empik.couponManager.model.CreateCouponRequest
+import com.empik.couponManager.model.UseCouponRequest
 import com.empik.couponManager.model.toResponse
 import com.empik.couponManager.service.CouponService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/coupons")
 class CouponController(
-    @Autowired private val service: CouponService
+    @Autowired private val couponService: CouponService,
 ) {
 
     @PostMapping
     fun create(@RequestBody request: CreateCouponRequest): ResponseEntity<CouponResponse> {
-        service.createCoupon(request).toResponse()
-        return ResponseEntity.ok(service.createCoupon(request).toResponse())
+        return ResponseEntity.ok(couponService.createCoupon(request).toResponse())
     }
 
+    @PostMapping("/use")
+    fun use(@RequestBody request: UseCouponRequest, @RequestHeader("X-Forwarded-For") ip: String): ResponseEntity<Unit> {
+        couponService.useCoupon(request, ip)
+        return ResponseEntity.ok().build()
+    }
 }

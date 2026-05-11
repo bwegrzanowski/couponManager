@@ -6,6 +6,7 @@ import com.empik.couponManager.model.Coupon
 import com.empik.couponManager.model.CouponId
 import com.empik.couponManager.model.CreatedAt
 import com.empik.couponManager.model.MaxUsages
+import com.empik.couponManager.model.UsageCount
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
@@ -15,21 +16,22 @@ import jakarta.persistence.Index
 import jakarta.persistence.Table
 import jakarta.persistence.Version
 import java.time.Instant
-import com.empik.couponManager.model.Version as CouponVersion
 
 @Entity
 @Table(
     name = "coupons",
     indexes = [Index(name = "idx_coupon_code", columnList = "code")]
 )
-class CouponEntity(
+data class CouponEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
     @Version
-    val version: Int? = null,
+    val version: Int = 0,
     @Column(nullable = false, unique = true)
     val code: String,
+    @Column(nullable = false)
+    val usageCount: Int,
     @Column(nullable = false, updatable = false)
     val createdAt: Instant = Instant.now(),
     @Column(nullable = false)
@@ -41,8 +43,8 @@ class CouponEntity(
 fun CouponEntity.toCoupon(): Coupon =
     Coupon(
         id = id?.let { CouponId(it) } ?: throw IllegalStateException("Id is null!"),
-        version = version?.let { CouponVersion(it) } ?: throw IllegalStateException("Version is null!"),
         code = Code(code),
+        usageCount = UsageCount(usageCount),
         createdAt = CreatedAt(createdAt),
         maxUsages = MaxUsages(maxUsages),
         countryCode = CountryCode(countryCode)
