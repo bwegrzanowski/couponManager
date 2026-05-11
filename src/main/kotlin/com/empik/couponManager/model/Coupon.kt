@@ -3,7 +3,6 @@ package com.empik.couponManager.model
 import java.time.Instant
 
 data class Coupon(
-    val id: CouponId,
     val usageCount: UsageCount,
     val code: Code,
     val createdAt: CreatedAt,
@@ -13,16 +12,12 @@ data class Coupon(
 
 fun Coupon.toResponse(): CouponResponse =
     CouponResponse(
-        id = id.value,
         code = code.value,
         createdAt = createdAt.value,
         usageCount = usageCount.value,
         maxUsages = maxUsages.value,
         countryCode = countryCode.value
     )
-
-@JvmInline
-value class CouponId(val value: Long)
 
 @JvmInline
 value class UsageCount(val value: Int)

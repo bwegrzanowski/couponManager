@@ -1,5 +1,6 @@
 package com.empik.couponManager.controller
 
+import com.empik.couponManager.exception.UnknownIpException
 import com.empik.couponManager.model.CouponResponse
 import com.empik.couponManager.model.CreateCouponRequest
 import com.empik.couponManager.model.UseCouponRequest
@@ -25,7 +26,8 @@ class CouponController(
     }
 
     @PostMapping("/use")
-    fun use(@RequestBody request: UseCouponRequest, @RequestHeader("X-Forwarded-For") ip: String): ResponseEntity<Unit> {
+    fun use(@RequestBody request: UseCouponRequest, @RequestHeader("X-Forwarded-For", required = false) ip: String?): ResponseEntity<Unit> {
+        ip ?: throw UnknownIpException()
         couponService.useCoupon(request, ip)
         return ResponseEntity.ok().build()
     }

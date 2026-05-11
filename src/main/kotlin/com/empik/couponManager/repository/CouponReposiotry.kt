@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 
 @Repository
-interface CouponRepository : JpaRepository<CouponEntity, Long> {
+interface CouponsRepository : JpaRepository<CouponEntity, Long> {
 
     fun existsByCode(code: String): Boolean
 
