@@ -8,7 +8,8 @@ import com.empik.couponManager.exception.CouponAlreadyExistsException
 import com.empik.couponManager.exception.CouponCountryCodeFormatException
 import com.empik.couponManager.exception.CouponMaxUsageNegativeException
 import com.empik.couponManager.exception.CouponNotFoundException
-import com.empik.couponManager.exception.CouponUsedException
+import com.empik.couponManager.exception.CouponUsedByUserException
+import com.empik.couponManager.exception.CouponUsedOutException
 import com.empik.couponManager.exception.CouponWrongCountryCodeOriginException
 import com.empik.couponManager.model.Coupon
 import com.empik.couponManager.model.CreateCouponRequest
@@ -43,15 +44,16 @@ class CouponService @Autowired constructor(
 
     fun useCoupon(request: UseCouponRequest, ip: String) {
         val code = request.code.uppercase()
-        if (usedCouponsRepository.existsByUserIdAndCode(request.userId, code)) throw CouponUsedException(code)
+        if (usedCouponsRepository.existsByUserIdAndCode(request.userId, code)) throw CouponUsedByUserException(code)
         val coupon = couponsRepository.findByCodeForUpdate(code) ?: throw CouponNotFoundException(code)
         coupon.validate(ip)
-        couponsRepository.save(coupon.copy(usageCount = coupon.usageCount + 1))
+        coupon.usageCount++
+        couponsRepository.save(coupon)
         usedCouponsRepository.save(UsedCouponEntity(code = code, userId = request.userId))
     }
 
     private fun CouponEntity.validate(ip: String) {
-        if (usageCount >= maxUsages) throw CouponUsedException(code)
+        if (usageCount >= maxUsages) throw CouponUsedOutException(code)
         val country = ipClient.resolveCountry(ip).uppercase()
         if (countryCode != country) throw CouponWrongCountryCodeOriginException(countryCode)
     }

@@ -6,8 +6,11 @@ class CouponAlreadyExistsException(code: String)
 class CouponNotFoundException(code: String)
     : RuntimeException("Could not found coupon with code: '$code'!")
 
-class CouponUsedException(code: String)
+class CouponUsedOutException(code: String)
     : RuntimeException("Coupon '$code' already used!")
+
+class CouponUsedByUserException(code: String)
+    : RuntimeException("Coupon '$code' already used by current user!")
 
 class CouponCountryCodeFormatException(countryCode: String)
     : RuntimeException("Country code: '$countryCode' not found! Try with 2 letters representing an existing country!")

@@ -26,7 +26,7 @@ data class CouponEntity(
     @Version
     val version: Int = 0,
     @Column(nullable = false)
-    val usageCount: Int,
+    var usageCount: Int,
     @Column(nullable = false, updatable = false)
     val createdAt: Instant = Instant.now(),
     @Column(nullable = false)

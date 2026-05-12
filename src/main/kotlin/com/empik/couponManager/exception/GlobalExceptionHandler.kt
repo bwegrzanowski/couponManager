@@ -20,8 +20,14 @@ class GlobalExceptionHandler {
             .status(HttpStatus.CONFLICT)
             .body(ex.message)
 
-    @ExceptionHandler(CouponUsedException::class)
-    fun handleUsed(ex: CouponUsedException): ResponseEntity<String> =
+    @ExceptionHandler(CouponUsedByUserException::class)
+    fun handleUsedByUser(ex: CouponUsedByUserException): ResponseEntity<String> =
+        ResponseEntity
+            .status(HttpStatus.CONFLICT)
+            .body(ex.message)
+
+    @ExceptionHandler(CouponUsedOutException::class)
+    fun handleUsedOut(ex: CouponUsedOutException): ResponseEntity<String> =
         ResponseEntity
             .status(HttpStatus.CONFLICT)
             .body(ex.message)
