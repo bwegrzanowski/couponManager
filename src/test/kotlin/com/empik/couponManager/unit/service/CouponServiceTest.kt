@@ -15,7 +15,6 @@ import com.empik.couponManager.util.COUPON_ENTITY
 import com.empik.couponManager.util.CREATE_REQUEST
 import com.empik.couponManager.util.IP
 import com.empik.couponManager.util.USE_REQUEST
-import io.kotest.matchers.shouldBe
 import io.mockk.called
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
@@ -26,6 +25,7 @@ import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import kotlin.random.Random
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 @ExtendWith(MockKExtension::class)
 class CouponServiceTest {
@@ -49,7 +49,7 @@ class CouponServiceTest {
 
         val result = couponService.createCoupon(CREATE_REQUEST.copy(code = "summer"))
 
-        result.code.value shouldBe "SUMMER"
+        assertEquals(result.code.value, "SUMMER")
         verify(exactly = 1) { couponsRepository.save(any()) }
     }
 
@@ -126,8 +126,6 @@ class CouponServiceTest {
         every { usedCouponsRepository.existsByUserIdAndCode(any(), any()) } returns false
         every { couponsRepository.findByCodeForUpdate(any()) } returns coupon
 
-        assertThrows<CouponUsedOutException> {
-            couponService.useCoupon(request, IP)
-        }
+        assertThrows<CouponUsedOutException> { couponService.useCoupon(request, IP) }
     }
 }

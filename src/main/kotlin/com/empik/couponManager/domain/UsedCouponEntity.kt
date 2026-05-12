@@ -8,7 +8,7 @@ import jakarta.persistence.Id
 import jakarta.persistence.Index
 import jakarta.persistence.Table
 import jakarta.persistence.UniqueConstraint
-import java.util.*
+import java.util.UUID
 
 @Entity
 @Table(

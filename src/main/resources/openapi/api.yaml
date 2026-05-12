@@ -1,0 +1,147 @@
+openapi: 3.0.3
+
+info:
+  title: Coupon Manager API
+  version: 1.0.0
+  description: |
+    REST API for managing and using discount coupons.
+tags:
+  - name: Coupons
+    description: Coupon management
+paths:
+  /coupons:
+    post:
+      tags:
+        - Coupons
+      summary: Create a new coupon
+      operationId: createCoupon
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCouponRequest'
+      responses:
+        '200':
+          description: Coupon successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CouponResponse'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Coupon already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /coupons/use:
+    post:
+      tags:
+        - Coupons
+      summary: Use coupon
+      operationId: useCoupon
+      parameters:
+        - name: X-Forwarded-For
+          in: header
+          required: true
+          schema:
+            type: string
+          description: Client IP address
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UseCouponRequest'
+      responses:
+        '200':
+          description: Coupon successfully used
+        '400':
+          description: Invalid request or missing IP
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Coupon cannot be used from this country
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Coupon not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Coupon already used or usage limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    CreateCouponRequest:
+      type: object
+      required:
+        - code
+        - maxUsages
+        - countryCode
+      properties:
+        code:
+          type: string
+          example: SUMMER2026
+        maxUsages:
+          type: integer
+          minimum: 1
+          example: 100
+        countryCode:
+          type: string
+          minLength: 2
+          maxLength: 2
+          example: PL
+    UseCouponRequest:
+      type: object
+      required:
+        - code
+        - userId
+      properties:
+        code:
+          type: string
+          example: SUMMER2026
+        userId:
+          type: string
+          format: uuid
+          example: 8be4df61-93ca-11d2-aa0d-00e098032b87
+    CouponResponse:
+      type: object
+      properties:
+        code:
+          type: string
+          example: SUMMER2026
+        createdAt:
+          type: string
+          format: date-time
+          example: 2026-05-12T10:15:30Z
+        maxUsages:
+          type: integer
+          example: 100
+        usageCount:
+          type: integer
+          example: 5
+        countryCode:
+          type: string
+          example: PL
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Coupon 'SUMMER2026' not found
