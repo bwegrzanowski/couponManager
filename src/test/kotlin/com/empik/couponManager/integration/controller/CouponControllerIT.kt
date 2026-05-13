@@ -21,6 +21,7 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.post
+import kotlin.test.assertEquals
 
 private const val CREATE_COUPON_PATH = "/coupons"
 private const val USE_COUPON_PATH = "/coupons/use"
@@ -79,19 +80,24 @@ class CouponControllerIntegrationTest : IntegrationTestConfig() {
     }
 
     @Test
-    fun `should use coupon`() {
+    fun `should use coupon and increase usage count`() {
         every { ipClient.resolveCountry(any()) } returns "PL"
         mockMvc.post(CREATE_COUPON_PATH) {
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsString(CREATE_REQUEST)
         }
+        val initialUsageCount = couponsRepository.findAll().first().usageCount
 
         mockMvc.post(USE_COUPON_PATH) {
             header(IP_HEADER, IP)
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsString(USE_REQUEST)
         }
-            .andExpect { status { isOk() } }
+            .andExpect {
+                status { isOk() }
+                assertEquals(initialUsageCount, 0)
+                assertEquals(couponsRepository.findAll().first().usageCount, 1)
+            }
     }
 
     @Test

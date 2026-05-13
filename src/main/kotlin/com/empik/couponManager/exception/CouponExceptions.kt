@@ -4,7 +4,7 @@ class CouponAlreadyExistsException(code: String)
     : RuntimeException("Coupon with code: '$code' already exists!")
 
 class CouponNotFoundException(code: String)
-    : RuntimeException("Could not found coupon with code: '$code'!")
+    : RuntimeException("Could not find coupon with code: '$code'!")
 
 class CouponUsedOutException(code: String)
     : RuntimeException("Coupon '$code' already used!")

@@ -144,4 +144,8 @@ components:
       properties:
         message:
           type: string
-          example: Coupon 'SUMMER2026' not found
+          example: Oops! Something went wrong!
+        timestamp:
+          type: string
+          format: date-time
+          example: 2026-05-12T10:15:30Z

@@ -1,5 +1,6 @@
 package com.empik.couponManager.exception
 
+import com.empik.couponManager.model.ErrorResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -9,50 +10,50 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 class GlobalExceptionHandler {
 
     @ExceptionHandler(CouponNotFoundException::class)
-    fun handleNotFound(ex: CouponNotFoundException): ResponseEntity<String> =
+    fun handleNotFound(ex: CouponNotFoundException): ResponseEntity<ErrorResponse> =
         ResponseEntity
             .status(HttpStatus.NOT_FOUND)
-            .body(ex.message)
+            .body(ErrorResponse(ex.message))
 
     @ExceptionHandler(CouponAlreadyExistsException::class)
-    fun handleAlreadyExists(ex: CouponAlreadyExistsException): ResponseEntity<String> =
+    fun handleAlreadyExists(ex: CouponAlreadyExistsException): ResponseEntity<ErrorResponse> =
         ResponseEntity
             .status(HttpStatus.CONFLICT)
-            .body(ex.message)
+            .body(ErrorResponse(ex.message))
 
     @ExceptionHandler(CouponUsedByUserException::class)
-    fun handleUsedByUser(ex: CouponUsedByUserException): ResponseEntity<String> =
+    fun handleUsedByUser(ex: CouponUsedByUserException): ResponseEntity<ErrorResponse> =
         ResponseEntity
             .status(HttpStatus.CONFLICT)
-            .body(ex.message)
+            .body(ErrorResponse(ex.message))
 
     @ExceptionHandler(CouponUsedOutException::class)
-    fun handleUsedOut(ex: CouponUsedOutException): ResponseEntity<String> =
+    fun handleUsedOut(ex: CouponUsedOutException): ResponseEntity<ErrorResponse> =
         ResponseEntity
             .status(HttpStatus.CONFLICT)
-            .body(ex.message)
+            .body(ErrorResponse(ex.message))
 
     @ExceptionHandler(CouponCountryCodeFormatException::class)
-    fun handleCountryCodeFormat(ex: CouponCountryCodeFormatException): ResponseEntity<String> =
+    fun handleCountryCodeFormat(ex: CouponCountryCodeFormatException): ResponseEntity<ErrorResponse> =
         ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
-            .body(ex.message)
+            .body(ErrorResponse(ex.message))
 
     @ExceptionHandler(CouponWrongCountryCodeOriginException::class)
-    fun handleWrongCountryCodeOrigin(ex: CouponWrongCountryCodeOriginException): ResponseEntity<String> =
+    fun handleWrongCountryCodeOrigin(ex: CouponWrongCountryCodeOriginException): ResponseEntity<ErrorResponse> =
         ResponseEntity
             .status(HttpStatus.FORBIDDEN)
-            .body(ex.message)
+            .body(ErrorResponse(ex.message))
 
     @ExceptionHandler(CouponMaxUsageNegativeException::class)
-    fun handleMaxUsageNegative(ex: CouponMaxUsageNegativeException): ResponseEntity<String> =
+    fun handleMaxUsageNegative(ex: CouponMaxUsageNegativeException): ResponseEntity<ErrorResponse> =
         ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
-            .body(ex.message)
+            .body(ErrorResponse(ex.message))
 
     @ExceptionHandler(UnknownIpException::class)
-    fun handleUnknownIP(ex: UnknownIpException): ResponseEntity<String> =
+    fun handleUnknownIP(ex: UnknownIpException): ResponseEntity<ErrorResponse> =
         ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
-            .body(ex.message)
+            .body(ErrorResponse(ex.message))
 }

@@ -8,9 +8,9 @@ import org.springframework.web.client.RestClient
 private const val IP_CLIENT_URL = "https://ipwho.is/"
 
 @Service
-class IPClient(@Autowired private val restClient: RestClient) {
+open class IPClient(@Autowired private val restClient: RestClient) {
 
-    fun resolveCountry(ip: String): String {
+    open fun resolveCountry(ip: String): String {
         val response = restClient.get()
             .uri("$IP_CLIENT_URL$ip")
             .retrieve()

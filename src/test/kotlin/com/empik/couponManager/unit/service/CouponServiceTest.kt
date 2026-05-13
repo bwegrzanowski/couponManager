@@ -1,6 +1,7 @@
 package com.empik.couponManager.unit.service
 
 import com.empik.couponManager.client.IPClient
+import com.empik.couponManager.domain.UsedCouponId
 import com.empik.couponManager.exception.CouponAlreadyExistsException
 import com.empik.couponManager.exception.CouponCountryCodeFormatException
 import com.empik.couponManager.exception.CouponMaxUsageNegativeException
@@ -81,7 +82,7 @@ class CouponServiceTest {
     fun `should use coupon`() {
         val request = USE_REQUEST
         val coupon = COUPON_ENTITY
-        every { usedCouponsRepository.existsByUserIdAndCode(request.userId, request.code.uppercase()) } returns false
+        every { usedCouponsRepository.existsById(UsedCouponId(request.userId, request.code.uppercase())) } returns false
         every { couponsRepository.findByCodeForUpdate(request.code.uppercase()) } returns coupon
         every { ipClient.resolveCountry(any()) } returns coupon.countryCode
         every { couponsRepository.save(any()) } answers { firstArg() }
@@ -96,14 +97,14 @@ class CouponServiceTest {
     @Test
     fun `should throw when coupon already used`() {
         val request = USE_REQUEST
-        every { usedCouponsRepository.existsByUserIdAndCode(request.userId, request.code.uppercase()) } returns true
+        every { usedCouponsRepository.existsById(UsedCouponId(request.userId, request.code.uppercase())) } returns true
 
         assertThrows<CouponUsedByUserException> { couponService.useCoupon(request, IP) }
     }
 
     @Test
     fun `should throw when coupon not found`() {
-        every { usedCouponsRepository.existsByUserIdAndCode(any(), any()) } returns false
+        every { usedCouponsRepository.existsById(UsedCouponId(any(), any())) } returns false
         every { couponsRepository.findByCodeForUpdate(any()) } returns null
 
         assertThrows<CouponNotFoundException> { couponService.useCoupon(USE_REQUEST, IP) }
@@ -112,7 +113,7 @@ class CouponServiceTest {
     @Test
     fun `should throw when country does not match`() {
         val coupon = COUPON_ENTITY
-        every { usedCouponsRepository.existsByUserIdAndCode(any(), any()) } returns false
+        every { usedCouponsRepository.existsById(UsedCouponId(any(), any())) } returns false
         every { couponsRepository.findByCodeForUpdate(any()) } returns coupon
         every { ipClient.resolveCountry(any()) } returns "DE"
 
@@ -123,7 +124,7 @@ class CouponServiceTest {
     fun `should throw when usage limit exceeded`() {
         val request = USE_REQUEST
         val coupon = COUPON_ENTITY.copy(usageCount = 5)
-        every { usedCouponsRepository.existsByUserIdAndCode(any(), any()) } returns false
+        every { usedCouponsRepository.existsById(UsedCouponId(any(), any())) } returns false
         every { couponsRepository.findByCodeForUpdate(any()) } returns coupon
 
         assertThrows<CouponUsedOutException> { couponService.useCoupon(request, IP) }

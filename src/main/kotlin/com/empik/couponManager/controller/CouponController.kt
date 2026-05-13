@@ -16,17 +16,17 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/coupons")
-class CouponController(
+open class CouponController(
     @Autowired private val couponService: CouponService,
 ) {
 
     @PostMapping
-    fun create(@RequestBody request: CreateCouponRequest): ResponseEntity<CouponResponse> {
+    open fun create(@RequestBody request: CreateCouponRequest): ResponseEntity<CouponResponse> {
         return ResponseEntity.ok(couponService.createCoupon(request).toResponse())
     }
 
     @PostMapping("/use")
-    fun use(@RequestBody request: UseCouponRequest, @RequestHeader("X-Forwarded-For", required = false) ip: String?): ResponseEntity<Unit> {
+    open fun use(@RequestBody request: UseCouponRequest, @RequestHeader("X-Forwarded-For", required = false) ip: String?): ResponseEntity<Unit> {
         ip ?: throw UnknownIpException()
         couponService.useCoupon(request, ip)
         return ResponseEntity.ok().build()

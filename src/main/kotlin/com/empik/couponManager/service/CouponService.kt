@@ -3,6 +3,7 @@ package com.empik.couponManager.service
 import com.empik.couponManager.client.IPClient
 import com.empik.couponManager.domain.CouponEntity
 import com.empik.couponManager.domain.UsedCouponEntity
+import com.empik.couponManager.domain.UsedCouponId
 import com.empik.couponManager.domain.toCoupon
 import com.empik.couponManager.exception.CouponAlreadyExistsException
 import com.empik.couponManager.exception.CouponCountryCodeFormatException
@@ -23,33 +24,33 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 @Transactional
-class CouponService @Autowired constructor(
+open class CouponService @Autowired constructor(
     private val couponsRepository: CouponsRepository,
     private val usedCouponsRepository: UsedCouponsRepository,
     private val ipClient: IPClient,
 ) {
-    fun createCoupon(request: CreateCouponRequest): Coupon {
+    open fun createCoupon(request: CreateCouponRequest): Coupon {
         request.validate()
         val code = request.code.uppercase()
         if (couponsRepository.existsByCode(code)) throw CouponAlreadyExistsException(code)
-
         val coupon = CouponEntity(
             usageCount = 0,
             code = code,
             maxUsages = request.maxUsages,
             countryCode = request.countryCode,
         )
+
         return couponsRepository.save(coupon).toCoupon()
     }
 
-    fun useCoupon(request: UseCouponRequest, ip: String) {
+    open fun useCoupon(request: UseCouponRequest, ip: String) {
         val code = request.code.uppercase()
-        if (usedCouponsRepository.existsByUserIdAndCode(request.userId, code)) throw CouponUsedByUserException(code)
+        if (usedCouponsRepository.existsById(UsedCouponId(request.userId, code))) throw CouponUsedByUserException(code)
         val coupon = couponsRepository.findByCodeForUpdate(code) ?: throw CouponNotFoundException(code)
         coupon.validate(ip)
         coupon.usageCount++
         couponsRepository.save(coupon)
-        usedCouponsRepository.save(UsedCouponEntity(code = code, userId = request.userId))
+        usedCouponsRepository.save(UsedCouponEntity(UsedCouponId(request.userId, code)))
     }
 
     private fun CouponEntity.validate(ip: String) {

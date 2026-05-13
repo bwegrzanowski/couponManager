@@ -1,27 +1,24 @@
 package com.empik.couponManager.domain
 
 import jakarta.persistence.Column
+import jakarta.persistence.Embeddable
+import jakarta.persistence.EmbeddedId
 import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
-import jakarta.persistence.Index
 import jakarta.persistence.Table
-import jakarta.persistence.UniqueConstraint
+import java.io.Serializable
 import java.util.UUID
 
 @Entity
-@Table(
-    name = "usedcoupons",
-    indexes = [Index(name = "uq_userId_code", columnList = "user_id,code")],
-    uniqueConstraints = [UniqueConstraint(columnNames = ["user_id", "coupon_id"])],
-)
+@Table(name = "usedcoupons")
 data class UsedCouponEntity(
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long? = null,
-    @Column(nullable = false)
-    val code: String,
-    @Column(nullable = false)
-    val userId: UUID,
+    @EmbeddedId
+    val id: UsedCouponId,
 )
+
+@Embeddable
+data class UsedCouponId(
+    @Column(name = "user_id", nullable = false)
+    val userId: UUID,
+    @Column(name = "code", nullable = false)
+    val code: String,
+) : Serializable
