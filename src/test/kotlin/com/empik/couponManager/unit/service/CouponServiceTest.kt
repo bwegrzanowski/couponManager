@@ -104,7 +104,7 @@ class CouponServiceTest {
 
     @Test
     fun `should throw when coupon not found`() {
-        every { usedCouponsRepository.existsById(UsedCouponId(any(), any())) } returns false
+        every { usedCouponsRepository.existsById(any()) } returns false
         every { couponsRepository.findByCodeForUpdate(any()) } returns null
 
         assertThrows<CouponNotFoundException> { couponService.useCoupon(USE_REQUEST, IP) }
@@ -113,7 +113,7 @@ class CouponServiceTest {
     @Test
     fun `should throw when country does not match`() {
         val coupon = COUPON_ENTITY
-        every { usedCouponsRepository.existsById(UsedCouponId(any(), any())) } returns false
+        every { usedCouponsRepository.existsById(any()) } returns false
         every { couponsRepository.findByCodeForUpdate(any()) } returns coupon
         every { ipClient.resolveCountry(any()) } returns "DE"
 
@@ -124,7 +124,7 @@ class CouponServiceTest {
     fun `should throw when usage limit exceeded`() {
         val request = USE_REQUEST
         val coupon = COUPON_ENTITY.copy(usageCount = 5)
-        every { usedCouponsRepository.existsById(UsedCouponId(any(), any())) } returns false
+        every { usedCouponsRepository.existsById(any()) } returns false
         every { couponsRepository.findByCodeForUpdate(any()) } returns coupon
 
         assertThrows<CouponUsedOutException> { couponService.useCoupon(request, IP) }
