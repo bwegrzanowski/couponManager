@@ -1,4 +1,4 @@
-package com.empik.couponManager.model
+package com.empik.couponManager.model.response
 
 import java.time.Instant
 

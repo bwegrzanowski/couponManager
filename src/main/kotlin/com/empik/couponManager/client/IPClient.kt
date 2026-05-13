@@ -1,6 +1,6 @@
 package com.empik.couponManager.client
 
-import com.empik.couponManager.model.IpClientResponse
+import com.empik.couponManager.model.response.IpClientResponse
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestClient

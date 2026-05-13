@@ -1,5 +1,6 @@
 package com.empik.couponManager.model
 
+import com.empik.couponManager.model.response.CouponResponse
 import java.time.Instant
 
 data class Coupon(

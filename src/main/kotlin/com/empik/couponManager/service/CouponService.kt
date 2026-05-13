@@ -13,8 +13,8 @@ import com.empik.couponManager.exception.CouponUsedByUserException
 import com.empik.couponManager.exception.CouponUsedOutException
 import com.empik.couponManager.exception.CouponWrongCountryCodeOriginException
 import com.empik.couponManager.model.Coupon
-import com.empik.couponManager.model.CreateCouponRequest
-import com.empik.couponManager.model.UseCouponRequest
+import com.empik.couponManager.model.request.CreateCouponRequest
+import com.empik.couponManager.model.request.UseCouponRequest
 import com.empik.couponManager.repository.CouponsRepository
 import com.empik.couponManager.repository.UsedCouponsRepository
 import com.neovisionaries.i18n.CountryCode

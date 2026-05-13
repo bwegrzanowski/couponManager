@@ -1,6 +1,6 @@
 package com.empik.couponManager.exception
 
-import com.empik.couponManager.model.ErrorResponse
+import com.empik.couponManager.model.response.ErrorResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ExceptionHandler

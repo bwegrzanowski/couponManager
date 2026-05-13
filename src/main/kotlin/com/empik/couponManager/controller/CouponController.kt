@@ -1,9 +1,9 @@
 package com.empik.couponManager.controller
 
 import com.empik.couponManager.exception.UnknownIpException
-import com.empik.couponManager.model.CouponResponse
-import com.empik.couponManager.model.CreateCouponRequest
-import com.empik.couponManager.model.UseCouponRequest
+import com.empik.couponManager.model.response.CouponResponse
+import com.empik.couponManager.model.request.CreateCouponRequest
+import com.empik.couponManager.model.request.UseCouponRequest
 import com.empik.couponManager.model.toResponse
 import com.empik.couponManager.service.CouponService
 import org.springframework.beans.factory.annotation.Autowired

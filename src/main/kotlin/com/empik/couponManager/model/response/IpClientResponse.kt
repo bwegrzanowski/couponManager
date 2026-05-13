@@ -1,4 +1,4 @@
-package com.empik.couponManager.model
+package com.empik.couponManager.model.response
 
 import com.fasterxml.jackson.annotation.JsonProperty
 

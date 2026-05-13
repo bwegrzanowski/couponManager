@@ -1,8 +1,8 @@
 package com.empik.couponManager.util
 
 import com.empik.couponManager.domain.CouponEntity
-import com.empik.couponManager.model.CreateCouponRequest
-import com.empik.couponManager.model.UseCouponRequest
+import com.empik.couponManager.model.request.CreateCouponRequest
+import com.empik.couponManager.model.request.UseCouponRequest
 import java.util.UUID
 
 const val IP_HEADER = "X-Forwarded-For"

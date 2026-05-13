@@ -1,4 +1,4 @@
-package com.empik.couponManager.model
+package com.empik.couponManager.model.request
 
 data class CreateCouponRequest(
     val code: String,
